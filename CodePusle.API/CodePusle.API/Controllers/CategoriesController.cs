@@ -38,5 +38,75 @@ namespace CodePusle.API.Controllers
 			return Ok(catergoryDto);
 
 		}
-    }
+
+		//GET: https://localhost:7145/api/Categories
+
+		[HttpGet]
+
+		public async Task<IActionResult> GetAllCategory()
+		{
+			var categories = await categoriesRepository.GetAllAsync();
+
+			// Map Domain model to Dto
+
+			var catergoriesDto = mapper.Map<List<CategoryDto>>(categories);
+
+			return Ok(catergoriesDto);
+		}
+
+		//GET: https://localhost:7145/api/Categories/{id}
+
+		[HttpGet]
+		[Route("{id:guid}")]
+
+		public async Task<IActionResult> GetCategoryById([FromRoute] Guid id)
+		{
+			var categoryDomain = await categoriesRepository.GetByIdAsync(id);
+
+			if(categoryDomain == null)
+			{
+				return NotFound();
+			}
+
+			var catergoryDto = mapper.Map<CategoryDto>(categoryDomain);
+
+			return Ok(catergoryDto);
+		}
+
+		[HttpPut]
+		[Route("{id:guid}")]
+
+		public async Task<IActionResult> UpdateCategory([FromRoute] Guid id, [FromBody] UpdateCategoryRequestDto updateCategoryRequestDto)
+		{
+			var categoryDomain = mapper.Map<Category>(updateCategoryRequestDto);
+
+			categoryDomain = await categoriesRepository.UpdateAsync(id,categoryDomain);
+
+			if(categoryDomain == null)
+			{
+				return NotFound();
+			}
+
+			var categoryDto = mapper.Map<CategoryDto>(categoryDomain);
+			return Ok(categoryDto);
+		}
+
+
+		[HttpDelete]
+		[Route("{id:guid}")]
+
+		public async Task<IActionResult> DeleteCategory([FromRoute]Guid id)
+		{
+			var categoryDomain = await categoriesRepository.DeleteAsync(id);
+
+			if(categoryDomain == null)
+			{
+				return NotFound();
+			}
+
+			var categoryDto = mapper.Map<CategoryDto>(categoryDomain);
+			return Ok(categoryDto);
+		}
+
+	}
 }

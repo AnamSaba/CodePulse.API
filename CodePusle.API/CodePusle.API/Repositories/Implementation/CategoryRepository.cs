@@ -2,6 +2,8 @@
 using CodePusle.API.Models.Domain;
 using CodePusle.API.Models.DTO;
 using CodePusle.API.Repositories.Inteface;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CodePusle.API.Repositories.Implementation
 {
@@ -21,5 +23,48 @@ namespace CodePusle.API.Repositories.Implementation
 
             return category;
         }
-    }
+		public async Task<IEnumerable<Category>> GetAllAsync()
+		{
+            return await dbContext.Categories.ToListAsync();
+		}
+
+		public async Task<Category?> GetByIdAsync(Guid id)
+		{
+			return await dbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
+		}
+
+		public async Task<Category?> UpdateAsync(Guid id, Category category)
+		{
+            var existingCategory = await dbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingCategory == null)
+            {
+                return null;
+            }
+
+            existingCategory.Name = category.Name;
+            existingCategory.UrlHandle = category.UrlHandle;
+
+            await dbContext.SaveChangesAsync();
+
+            return existingCategory;
+		}
+
+		public async Task<Category?> DeleteAsync(Guid id)
+		{
+			var existingCategory = await dbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingCategory == null)
+            {
+                return null;
+            }
+
+            dbContext.Categories.Remove(existingCategory);
+            await dbContext.SaveChangesAsync();
+            return existingCategory;
+
+		}
+
+
+	}
 }

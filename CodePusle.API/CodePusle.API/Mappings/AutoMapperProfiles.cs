@@ -10,6 +10,7 @@ namespace CodePusle.API.Mappings
         {
             CreateMap<Category, CreateCategoryRequestDto>().ReverseMap();
             CreateMap<Category,CategoryDto>().ReverseMap();
+            CreateMap<Category, UpdateCategoryRequestDto>().ReverseMap();   
         }
     }
 }
