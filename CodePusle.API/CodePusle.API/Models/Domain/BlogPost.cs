@@ -1,4 +1,6 @@
-﻿namespace CodePusle.API.Models.Domain
+﻿using System.Collections.ObjectModel;
+
+namespace CodePusle.API.Models.Domain
 {
 	public class BlogPost
 	{
@@ -11,5 +13,6 @@
         public DateTime PublishedDate { get; set; }
         public string Author { get; set; }
         public bool IsVisible { get; set; }
-    }
+		public ICollection<Category> Categories { get; set; } = new Collection<Category>();
+	}
 }

@@ -24,6 +24,7 @@ internal class Program
 
 		builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 		builder.Services.AddScoped<ICategoriesRepository, CategoryRepository>();
+		builder.Services.AddScoped<IBlogPostRepository, BlogPostRespository>();
 
 var app = builder.Build();
 

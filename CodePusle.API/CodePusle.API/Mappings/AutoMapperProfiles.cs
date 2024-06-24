@@ -8,9 +8,13 @@ namespace CodePusle.API.Mappings
 	{
         public AutoMapperProfiles()
         {
-            CreateMap<Category, CreateCategoryRequestDto>().ReverseMap();
+            CreateMap<Category, CreateCategoryRequestDto>()
+                .ReverseMap();
             CreateMap<Category,CategoryDto>().ReverseMap();
-            CreateMap<Category, UpdateCategoryRequestDto>().ReverseMap();   
+            CreateMap<Category, UpdateCategoryRequestDto>().ReverseMap();
+            CreateMap<CreateBlogPostRequestDto, BlogPost>().ReverseMap();
+			CreateMap<UpdateBlogPostRequestDto, BlogPost>().ReverseMap();
+			CreateMap<BlogPost, BlogPostDto>().ReverseMap();
         }
     }
 }
