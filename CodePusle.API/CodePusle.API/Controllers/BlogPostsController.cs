@@ -124,5 +124,24 @@ namespace CodePusle.API.Controllers
 			return Ok(blogPostDto);
 		}
 
+
+		// GET: {apiBaseUrl}/api/blogposts/{urlHandle}
+
+		[HttpGet]
+		[Route("{urlHandle}")]
+
+		public async Task<IActionResult> GetByUrlHandle([FromRoute] string urlHandle)
+		{
+			var blogPostDomain = await blogPostRepository.GetByUrlHandleAsync(urlHandle);
+
+			if (blogPostDomain == null)
+			{
+				return NotFound();
+			}
+			var blogPostDtos = mapper.Map<BlogPostDto>(blogPostDomain);
+
+			return Ok(blogPostDtos);
+		}
+
 	}
 }
