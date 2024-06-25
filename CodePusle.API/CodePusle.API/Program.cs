@@ -3,6 +3,7 @@ using CodePusle.API.Mappings;
 using CodePusle.API.Repositories.Implementation;
 using CodePusle.API.Repositories.Inteface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 internal class Program
 {
@@ -13,6 +14,9 @@ internal class Program
 		// Add services to the container.
 
 		builder.Services.AddControllers();
+
+		builder.Services.AddHttpContextAccessor();
+
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
@@ -25,6 +29,7 @@ internal class Program
 		builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 		builder.Services.AddScoped<ICategoriesRepository, CategoryRepository>();
 		builder.Services.AddScoped<IBlogPostRepository, BlogPostRespository>();
+		builder.Services.AddScoped<IImageRespository, ImageRepository>();
 
 var app = builder.Build();
 
@@ -45,6 +50,12 @@ var app = builder.Build();
 		});
 
 		app.UseAuthorization();
+
+		app.UseStaticFiles(new StaticFileOptions
+		{
+			FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+			RequestPath = "/Images"
+		});
 
 		app.MapControllers();
 
