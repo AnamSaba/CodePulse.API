@@ -3,6 +3,7 @@ using CodePusle.API.Data;
 using CodePusle.API.Models.Domain;
 using CodePusle.API.Models.DTO;
 using CodePusle.API.Repositories.Inteface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,7 @@ namespace CodePusle.API.Controllers
 		// POST: 
 
 		[HttpPost]
-
+		[Authorize(Roles = "Writer")]
 		public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequestDto createCategoryRequestDto)
 		{
 			var categoryDomain = mapper.Map<Category>(createCategoryRequestDto);
@@ -42,7 +43,7 @@ namespace CodePusle.API.Controllers
 		//GET: https://localhost:7145/api/Categories
 
 		[HttpGet]
-
+		
 		public async Task<IActionResult> GetAllCategory()
 		{
 			var categories = await categoriesRepository.GetAllAsync();
@@ -75,7 +76,7 @@ namespace CodePusle.API.Controllers
 
 		[HttpPut]
 		[Route("{id:guid}")]
-
+		[Authorize(Roles = "Writer")]
 		public async Task<IActionResult> UpdateCategory([FromRoute] Guid id, [FromBody] UpdateCategoryRequestDto updateCategoryRequestDto)
 		{
 			var categoryDomain = mapper.Map<Category>(updateCategoryRequestDto);
@@ -94,7 +95,7 @@ namespace CodePusle.API.Controllers
 
 		[HttpDelete]
 		[Route("{id:guid}")]
-
+		[Authorize(Roles = "Writer")]
 		public async Task<IActionResult> DeleteCategory([FromRoute]Guid id)
 		{
 			var categoryDomain = await categoriesRepository.DeleteAsync(id);

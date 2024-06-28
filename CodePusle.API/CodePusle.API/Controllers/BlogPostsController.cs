@@ -2,6 +2,7 @@
 using CodePusle.API.Models.Domain;
 using CodePusle.API.Models.DTO;
 using CodePusle.API.Repositories.Inteface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,7 @@ namespace CodePusle.API.Controllers
         // POST: {apiBaseUrl}/api/blogposts
 
         [HttpPost]
-
+		[Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateBlogPost([FromBody] CreateBlogPostRequestDto createBlogPostRequestDto)
         {
 			var blogPostDomain = mapper.Map<BlogPost>(createBlogPostRequestDto);
@@ -79,6 +80,7 @@ namespace CodePusle.API.Controllers
 
 		[HttpPut]
 		[Route("{id:guid}")]
+		[Authorize(Roles = "Writer")]
 
 		public async Task<IActionResult> UpdateBlogPost([FromRoute] Guid id, [FromBody] UpdateBlogPostRequestDto requestDto)
 		{
@@ -109,6 +111,7 @@ namespace CodePusle.API.Controllers
 
 		[HttpDelete]
 		[Route("{id:guid}")]
+		[Authorize(Roles = "Writer")]
 
 		public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
 		{
