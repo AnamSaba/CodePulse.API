@@ -40,13 +40,18 @@ namespace CodePusle.API.Controllers
 
 		}
 
-		//GET: https://localhost:7145/api/Categories
+		//GET: https://localhost:7145/api/Categories?query=html&sortBy=name&sortDirection=desc&pageNumber
 
 		[HttpGet]
 		
-		public async Task<IActionResult> GetAllCategory()
+		public async Task<IActionResult> GetAllCategory([FromQuery] string? query, 
+			[FromQuery] string? sortBy,
+			[FromQuery] string? sortDirection,
+			[FromQuery] int? pageNumber,
+			[FromQuery] int? pageSize)
 		{
-			var categories = await categoriesRepository.GetAllAsync();
+			var categories = await categoriesRepository
+								.GetAllAsync(query, sortBy, sortDirection, pageNumber, pageSize);
 
 			// Map Domain model to Dto
 
@@ -107,6 +112,18 @@ namespace CodePusle.API.Controllers
 
 			var categoryDto = mapper.Map<CategoryDto>(categoryDomain);
 			return Ok(categoryDto);
+		}
+
+		// GET: {apiBaseUrl}/categories/count
+
+		[HttpGet]
+		[Route("count")]
+
+		public async Task<IActionResult> GetCategoriesTotal()
+		{
+			var count = await categoriesRepository.GetTotalCountAsync();
+
+			return Ok(count);
 		}
 
 	}
